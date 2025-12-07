@@ -1,5 +1,6 @@
 import pygame
 import time
+import sys
 
 # Initialize pygame
 pygame.init()
@@ -8,6 +9,7 @@ pygame.init()
 WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Lost in the Woods")
+clock = pygame.time.Clock()
 
 # Fonts and colors
 font = pygame.font.SysFont("arial", 24)
@@ -50,8 +52,11 @@ def draw_text(text):
 
 # Function to show inventory
 def show_inventory():
-    draw_text("Inventory: " + ", ".join(inventory) if inventory else "Inventory is empty")
-    time.sleep(2)
+    if inventory:
+        message = "Inventory: " + ", ".join(inventory)
+    else:
+        message = "Inventory is empty"
+    pause_text(message, 2)
 
 # Function to get input with inventory support
 def get_input(prompt):
@@ -62,7 +67,7 @@ def get_input(prompt):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                exit()
+                sys.exit()
             if event.type == pygame.KEYDOWN:
                 # Show inventory
                 if event.key == pygame.K_i:
@@ -76,6 +81,7 @@ def get_input(prompt):
                 else:
                     user_text += event.unicode
         draw_text(prompt + "\n" + user_text)
+        clock.tick(60)
     return user_text.lower()
 
 # Function for non-interactive pauses with inventory access
@@ -86,10 +92,11 @@ def pause_text(text, seconds=2):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                exit()
+                sys.exit()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_i:
                 show_inventory()
                 draw_text(text)
+        clock.tick(60)
 
 # Menu START
 draw_text("Welcome to my game!Press any key to start.")
@@ -98,14 +105,14 @@ while waiting:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
-            exit()
+            sys.exit()
         if event.type == pygame.KEYDOWN:
             waiting = False
             pause_text("Get ready to start your adventure!", 2)
             pause_text("Press 'I' anytime to view your inventory.", 2)
-            pause_text("Game is loading ...", 2)
-            time.sleep(5)
-            print("Assets Loaded. Starting game...")
+            pause_text("Game is loading ...", 5)
+            pause_text("Assets Loaded. Starting game...", 2)
+    clock.tick(60)
 # Menu END
 pause_text("You find yourself lost in a dark forest.\nYou can barely see anything around you.", 3)
 choice1 = get_input("Do you want to go left or right? (Type 'left' or 'right')")
@@ -167,4 +174,7 @@ if choice1 == "left":
                             pause_text("You are teleported outside the rock formation!", 3)
                             pause_text("The ghost king appears again!", 3)
                             pause_text("He says:See that village over there? that is the survivor's haven.", 3)
-                            pause_text("to be continued...", 3)
+                            pause_text("Stay safe there,and rebuild the kingdom.", 3)
+                            pause_text("You thank him for all his help!", 3)
+                            pause_text("You head towards the village," , 3)
+                            pause_text("to be continued...", 5)
