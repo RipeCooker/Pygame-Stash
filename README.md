@@ -1,2 +1,2 @@
-# Pygame-Stash
-The stash of games
+# Quest-madness
+Another text based game
